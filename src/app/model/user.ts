@@ -7,7 +7,7 @@ export class User {
   public email: string;
   public logInDateDisplay: Date;
   public joinDate: Date;
-  public profileImageUrl: string;
+  public profileImage: string;
   public active: boolean;
   public notLocked: boolean;
   public role: string;
