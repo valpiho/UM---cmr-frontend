@@ -16,6 +16,7 @@ export class UserComponent implements OnInit {
   public titleAction$ = this.titleSubject.asObservable();
   public refreshing: boolean;
 
+  public selectedUser: User;
   public users: User[]
   private subscriptions: Subscription[] = [];
 
@@ -48,6 +49,11 @@ export class UserComponent implements OnInit {
         }
       )
     );
+  }
+
+  public onSelectUser(selectedUser: User): void {
+    this.selectedUser = selectedUser;
+    document.getElementById('openUserInfo').click()
   }
 
   private sendNotification(notificationType: NotificationType, message: string) {
