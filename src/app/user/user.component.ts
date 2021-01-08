@@ -73,7 +73,7 @@ export class UserComponent implements OnInit {
     this.subscriptions.push(
       this.userService.addUser(formData).subscribe(
         (response: User) => {
-          UserComponent.clickButton('new-user-close')
+          UserComponent.clickButton('new-user-close');
           this.getUsers(false);
           this.fileName = null;
           this.profileImage = null;
@@ -86,7 +86,23 @@ export class UserComponent implements OnInit {
       )
     );
   }
-  
+
+  public searchUsers(searchTherm: string): void {
+    const results: User[] = [];
+    for (const user of this.userService.getUsersFromLocalCache()) {
+      if (user.firstName.toLowerCase().indexOf(searchTherm.toLowerCase()) !== -1 ||
+        user.lastName.toLowerCase().indexOf(searchTherm.toLowerCase()) !== -1 ||
+        user.username.toLowerCase().indexOf(searchTherm.toLowerCase()) !== -1 ||
+        user.userId.toLowerCase().indexOf(searchTherm.toLowerCase()) !== -1) {
+        results.push(user);
+      }
+    }
+    this.users = results;
+    if (results.length == 0 || !searchTherm) {
+      this.users = this.userService.getUsersFromLocalCache();
+    }
+  }
+
   private sendNotification(notificationType: NotificationType, message: string) {
     if (message) {
       this.notificationService.notify(notificationType, message);
