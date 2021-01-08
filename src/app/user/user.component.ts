@@ -6,6 +6,7 @@ import {NotificationService} from "../service/notification.service";
 import {NotificationType} from "../enum/notification-type.enum";
 import {HttpErrorResponse} from "@angular/common/http";
 import {NgForm} from "@angular/forms";
+import {CustomHttpResponse} from "../model/custom-http-response";
 
 @Component({
   selector: 'app-user',
@@ -22,6 +23,9 @@ export class UserComponent implements OnInit {
   public selectedUser: User;
   public users: User[];
   private subscriptions: Subscription[] = [];
+
+  public editUser = new User();
+  private currentUsername: string;
 
   constructor(private userService: UserService,
               private notificationService: NotificationService) { }
@@ -78,7 +82,7 @@ export class UserComponent implements OnInit {
           this.fileName = null;
           this.profileImage = null;
           userForm.reset();
-          this.sendNotification(NotificationType.SUCCESS, `${response.firstName} ${response.lastName} updated successfully`);
+          this.sendNotification(NotificationType.SUCCESS, `${response.firstName} ${response.lastName} added successfully`);
         },
         (errorResponse: HttpErrorResponse) => {
           this.sendNotification(NotificationType.ERROR, errorResponse.error.message);
@@ -101,6 +105,44 @@ export class UserComponent implements OnInit {
     if (results.length == 0 || !searchTherm) {
       this.users = this.userService.getUsersFromLocalCache();
     }
+  }
+
+  public onEditUser(editUser: User): void {
+    this.editUser = editUser;
+    this.currentUsername = editUser.username;
+    UserComponent.clickButton('openUserEdit')
+  }
+
+  public onUpdateUser(): void {
+    const formData = this.userService.createUserFormData(this.currentUsername, this.editUser, this.profileImage);
+    this.subscriptions.push(
+      this.userService.updateUser(formData).subscribe(
+        (response: User) => {
+          UserComponent.clickButton('closeEditUserModalButton');
+          this.getUsers(false);
+          this.fileName = null;
+          this.profileImage = null;
+          this.sendNotification(NotificationType.SUCCESS, `${response.firstName} ${response.lastName} updated successfully`);
+        },
+        (errorResponse: HttpErrorResponse) => {
+          this.sendNotification(NotificationType.ERROR, errorResponse.error.message);
+        }
+      )
+    );
+  }
+
+  public onDeleteUser(userId: number): void {
+    this.subscriptions.push(
+      this.userService.deleteUser(userId).subscribe(
+        (response:CustomHttpResponse) => {
+          this.sendNotification(NotificationType.SUCCESS, response.message);
+          this.getUsers(false);
+        },
+        (errorResponse: HttpErrorResponse) => {
+          this.sendNotification(NotificationType.ERROR, errorResponse.error.message);
+        }
+      )
+    )
   }
 
   private sendNotification(notificationType: NotificationType, message: string) {
