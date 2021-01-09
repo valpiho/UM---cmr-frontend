@@ -7,6 +7,8 @@ import {NotificationType} from "../enum/notification-type.enum";
 import {HttpErrorResponse} from "@angular/common/http";
 import {NgForm} from "@angular/forms";
 import {CustomHttpResponse} from "../model/custom-http-response";
+import {Router} from "@angular/router";
+import {AuthenticationService} from "../service/authentication.service";
 
 @Component({
   selector: 'app-user',
@@ -17,7 +19,7 @@ export class UserComponent implements OnInit {
   private titleSubject = new BehaviorSubject<string>('Users');
   public titleAction$ = this.titleSubject.asObservable();
   public refreshing: boolean;
-
+  public user: User;
   public fileName: string;
   public profileImage: File;
   public selectedUser: User;
@@ -27,10 +29,13 @@ export class UserComponent implements OnInit {
   public editUser = new User();
   private currentUsername: string;
 
-  constructor(private userService: UserService,
+  constructor(private router: Router,
+              private userService: UserService,
+              private authenticationService: AuthenticationService,
               private notificationService: NotificationService) { }
 
   ngOnInit(): void {
+    this.user = this.authenticationService.getUserFromLocalCache();
     this.getUsers(true);
   }
 
