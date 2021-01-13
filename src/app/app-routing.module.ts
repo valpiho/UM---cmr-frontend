@@ -10,7 +10,6 @@ const  routes: Routes = [
   {path: 'register', component: RegisterComponent},
   {path: 'user/management', component: UserComponent, canActivate: [AuthenticationGuard]},
   {path: '', redirectTo: '/login', pathMatch: 'full'},
-  {path: '**', redirectTo: '/login', pathMatch: 'full'},
 ]
 
 @NgModule({

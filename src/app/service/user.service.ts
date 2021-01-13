@@ -37,7 +37,7 @@ export class UserService {
       });
   }
 
-  public deleteUser(userId: number): Observable<CustomHttpResponse> {
+  public deleteUser(userId: string): Observable<CustomHttpResponse> {
     return this.http.delete<CustomHttpResponse>(`${this.host}/user/delete/${userId}`);
   }
 

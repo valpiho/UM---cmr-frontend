@@ -13,6 +13,7 @@ import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { UserComponent } from './user/user.component';
 import {FormsModule} from "@angular/forms";
+import {NotificationService} from "./service/notification.service";
 
 @NgModule({
   declarations: [
@@ -29,6 +30,7 @@ import {FormsModule} from "@angular/forms";
     NotificationModule
   ],
   providers: [
+    NotificationService,
     AuthenticationGuard,
     AuthenticationService,
     UserService,

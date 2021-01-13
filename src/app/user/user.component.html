@@ -62,7 +62,7 @@
         <tbody *ngFor="let appUser of users">
         <tr class="text-center">
           <td>
-            <img src="{{appUser?.profileImage}}" alt="" class="rounded-circle img-fluid img-thumbnail" height="40" width="40">
+            <img src="{{appUser?.profileImageUrl}}" alt="" class="rounded-circle img-fluid img-thumbnail" height="40" width="40">
           </td>
           <td (click)="onSelectUser(appUser)">{{appUser?.userId}}</td>
           <td (click)="onSelectUser(appUser)">{{appUser?.firstName}}</td>
@@ -79,7 +79,7 @@
                 <i class="fa fa-edit"></i>
               </button>
               <button class="btn btn-outline-danger">
-                <i class="fa fa-trash" (click)="onDeleteUser(appUser.userId)"></i>
+                <i class="fa fa-trash" (click)="onDeleteUser(appUser.username)"></i>
               </button>
             </div>
           </td>
@@ -129,7 +129,7 @@
                     <div class="col-12 col-sm-auto">
                       <div class="mx-auto" style="width: 120px;">
                         <div class="d-flex justify-content-center align-items-center rounded">
-                          <img src="{{selectedUser?.profileImage}}" alt="{{selectedUser?.firstName}}" class="rounded" height="120" width="120">
+                          <img src="{{selectedUser?.profileImageUrl}}" alt="{{selectedUser?.firstName}}" class="rounded" height="120" width="120">
                         </div>
                       </div>
                     </div>
@@ -142,7 +142,7 @@
                           <span [hidden]="selectedUser?.active" class="badge badge-danger">Inactive</span>
                         </div>
                         <div class="text-muted">
-                          <small>Last Login: {{selectedUser?.logInDateDisplay | date: 'medium'}}</small>
+                          <small>Last Login: {{selectedUser?.lastLoginDateDisplay | date: 'medium'}}</small>
                         </div>
                       </div>
                       <div class="text-center text-sm-right">
@@ -164,8 +164,8 @@
                   <li class="list-group-item">
                     <i class="fas fa-shield-alt float-right"></i>{{selectedUser?.role.substring(5)}}
                   </li>
-                  <li *ngIf="selectedUser?.logInDateDisplay" class="list-group-item">
-                    <i class="fas fa-sign-in-alt float-right"></i>{{selectedUser?.logInDateDisplay | date: 'medium'}}
+                  <li *ngIf="selectedUser?.lastLoginDateDisplay" class="list-group-item">
+                    <i class="fas fa-sign-in-alt float-right"></i>{{selectedUser?.lastLoginDateDisplay | date: 'medium'}}
                   </li>
                   <li class="list-group-item">
                     <span>
@@ -320,9 +320,9 @@
                   <span class="input-group-text">Profile Picture </span>
                 </div>
                 <div class="custom-file">
-                  <input type="file" accept="image/*" name="profileImage"
-                         (change)="onProfileImageChange($event.target.files[0].name, $event.target.files[0])"
-                         class="custom-file-input">
+                  <input type="file" accept="image/*" name="profileImage" class="custom-file-input">
+                        <!-- (change)="onProfileImageChange($event.target.files[0].name, $event.target.files[0])" -->
+
                   <label class="custom-file-label"><span [hidden]="!fileName">{{fileName}}</span>
                     <span [hidden]="fileName">Choose File</span>
                   </label>
